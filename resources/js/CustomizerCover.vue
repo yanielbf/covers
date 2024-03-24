@@ -139,8 +139,8 @@
                      <div class="mb-8" data-html2canvas-ignore="true">
                         <div class="border w-full h-[500px] rounded-md">
                            <TresCanvas v-if="!isLoading3D" clear-color="#fff" preset="realistic">
-                              <TresPerspectiveCamera :position="[3, 2, -250]" />
-                              <OrbitControls />
+                              <TresPerspectiveCamera :position="[3, 2, -210]" />
+                              <OrbitControls :enableZoom="false" />
                               <Suspense>
                                  <primitive :object="scene" />
                               </Suspense>
@@ -236,14 +236,17 @@
       `${window.model}_back_${backColorSelected.value.id}_${backColorSelected.value.color.replace('#', '')}_side_${borderColorSelected.value.id}_${borderColorSelected.value.color.replace('#', '')}_text_${text.value}_fontSize_${textSize.value}`)
     
    function handlerChangeMaterial(piece, item) {
-      scene.remove(scene.children[0]);
-      const group = new THREE.Group();
-      
       if(piece == '1_1') {
          borderColorSelected.value = item;
       } else if(piece == '1_2') {
          backColorSelected.value = item;
       }
+      
+      if(isLoading3D.value)
+         return
+
+      scene.remove(scene.children[0]);
+      const group = new THREE.Group();
       
       const pieceSelected = pieces.value.filter((x) => x.key === piece)[0];
       const pieceToChange = toRaw(pieceSelected.value);
@@ -483,6 +486,7 @@
          const { nodes, materials } = await useGLTF(window.urlGlb, {
             draco: true,
          });
+         
          isLoading3D.value = false
       
          pieces.value = Object.entries(nodes)
@@ -506,7 +510,7 @@
             const piece = toRaw(iterator.value);
             let mat = toRaw(piece.material);
             if(iterator.key == '1_2')
-               mat.color.set(backColorSelected.color);
+               mat.color.set(backColorSelected.value.color);
             if(iterator.key == '1_1')
                mat.color.set(borderColorSelected.color);
             piece.material = mat;
