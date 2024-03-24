@@ -1,11 +1,11 @@
 <template>
-<div class="bg-white">
+<div ref="page" class="bg-white">
    <div>
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-         <div class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
+         <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-5">Builder 3D Cover</h1>
             <div class="flex items-center">
-               <button type="button" class="flex items-center text-gray-400 hover:text-gray-500">
+               <button @click="handlerFinish" type="button" class="flex items-center text-gray-400 hover:text-gray-500">
                   <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
                   </svg>
@@ -57,7 +57,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="border w-full h-[500px] rounded-md">
+                     <div data-html2canvas-ignore="true" class="border w-full h-[500px] rounded-md">
                         <TresCanvas clear-color="#fff" preset="realistic">
                            <TresPerspectiveCamera :position="[3, 2, -250]" />
                            <OrbitControls />
@@ -69,7 +69,7 @@
                         </TresCanvas>
                      </div>
                   </div>
-                  <div>
+                  <div data-html2canvas-ignore="true">
                      <div class="mb-10 grid grid-cols-[60px_1fr] items-center gap-6">
                         <div class="text-xl">Texto</div>
                         <div class="flex flex-wrap gap-3">
@@ -146,6 +146,7 @@
    import * as THREE from "three";
    import { TresCanvas } from "@tresjs/core";
    import { useGLTF, OrbitControls } from "@tresjs/cientos";
+   import html2canvas from 'html2canvas';
    
    const colors = {
       back: [
@@ -174,6 +175,7 @@
    const borderColorSelected = ref(colors.side[0]);
    const text = ref();
    const textSize = ref(20);
+   const page = ref();
     
    const scene = new THREE.Scene();
    const pieces = ref([]);
@@ -397,6 +399,12 @@
       } else {
          transformerNode.nodes([]);
       }
+   }
+
+   async function handlerFinish() {
+      html2canvas(page.value).then(function(canvas) {
+         document.body.appendChild(canvas);
+      });
    }
     
    async function init3d() {
