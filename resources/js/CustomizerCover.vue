@@ -2,10 +2,10 @@
 <div ref="page" class="bg-white">
    <div>
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-         <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pb-6 pt-10">
-            <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-5">Builder 3D Cover</h1>
+         <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pt-10 mb-4 md:mb-0">
+            <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-5">Personalizar cover</h1>
             <div class="flex items-center">
-               <button @click="handlerFinish" type="button" class="flex items-center text-gray-400 hover:text-gray-500">
+               <button @click="handlerFinish" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center mb-4 md:mb-0">
                   <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
                   </svg>
@@ -16,19 +16,6 @@
          <section aria-labelledby="products-heading" class="pb-10">
             <div class="grid grid-cols-1 gap-x-8 gap-y-10">
                <div class="py-6">
-                  <div class="mb-8" data-html2canvas-ignore="true">
-                     <div data-html2canvas-ignore="true" class="border w-full h-[500px] rounded-md">
-                        <TresCanvas clear-color="#fff" preset="realistic">
-                           <TresPerspectiveCamera :position="[3, 2, -250]" />
-                           <OrbitControls />
-                           <Suspense>
-                              <primitive :object="scene" />
-                           </Suspense>
-                           <TresDirectionalLight :intensity="2" :position="[3, 3, 3]" />
-                           <TresAmbientLight :intensity="1" />
-                        </TresCanvas>
-                     </div>
-                  </div>
                   <div data-html2canvas-ignore="true">
                      <div class="grid grid-cols-[120px_1fr] gap-6 mb-4">
                         <div class="text-xl">Parte trasera</div>
@@ -41,7 +28,7 @@
                               'border-white': item.color != backColorSelected.color,
                               'border-black border-2': item.color == backColorSelected.color 
                               }"
-                              class="w-10 h-10 cursor-pointer rounded-full flex justify-center items-center"
+                              class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
                               @click="handlerChangeMaterial('1_2', item)"
                            >
                               <svg v-if="item.color == backColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -50,7 +37,7 @@
                            </div>
                         </div>
                      </div>
-                     <div class="mb-8 grid grid-cols-[120px_1fr] items-center gap-6">
+                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
                         <div class="text-xl">Bordes</div>
                         <div class="flex flex-wrap gap-3">
                            <div
@@ -61,7 +48,7 @@
                               'border-white': item.color != borderColorSelected.color,
                               'border-black border-2': item.color == borderColorSelected.color 
                               }"
-                              class="w-10 h-10 cursor-pointer rounded-full flex justify-center items-center"
+                              class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
                               @click="handlerChangeMaterial('1_1', item)"
                            >
                               <svg v-if="item.color == borderColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
@@ -73,7 +60,7 @@
                      <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
                         <div class="text-xl">Texto</div>
                         <div class="flex flex-wrap gap-3">
-                           <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
+                           <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
                         </div>
                      </div>
                      <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
@@ -83,7 +70,7 @@
                               v-for="item in [20, 25, 30]"
                               :key="item" 
                               :class="{
-                                 'bg-red-400': item === textSize
+                                 'bg-red-400 text-white': item === textSize
                               }"
                               class="cursor-pointer rounded-xl px-2 py-1 flex justify-center items-center bg-gray-300"
                               @click="handlerChangeSize(item)"
@@ -93,51 +80,66 @@
                         </div>
                      </div>
                   </div>
-                  <div class="mb-5">
-                     <div>Modelo: {{ model }}</div>
-                     <div>Color parte trasera: {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
-                     <div>Color border: {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
-                     <div>Texto: {{ text }}</div>
-                     <div>Tamaño: {{ fontSize[textSize] }}</div>
+                  <div class="mb-8">
+                     <div><b>Modelo:</b> {{ model }}</div>
+                     <div><b>Color parte trasera:</b> {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
+                     <div><b>Color border:</b> {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
+                     <div><b>Texto:</b> {{ text }}</div>
+                     <div><b>Tamaño:</b> {{ fontSize[textSize] }}</div>
                   </div>
-                  <div class="border w-full h-[500px] rounded-md p-5 flex justify-center items-center">
-                     <div :class="{
-                        [`border-[${borderColorSelected.color}]`]: true,
-                        [`bg-[${backColorSelected.color}]`]: true,
-                        }" 
-                        class="w-[90%] sm:1/4 md:w-1/5 h-full rounded-xl grid grid-rows-[30%_1fr] grid-cols-1 p-1 border-8"
-                     >
-                        <div class="flex justify-center">
-                           <div class="w-4 h-4 mt-3 rounded-full bg-black border-2 border-white"></div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                     <div class="border w-full h-[500px] rounded-md p-5 flex justify-center items-center">
+                        <div :class="{
+                           [`border-[${borderColorSelected.color}]`]: true,
+                           [`bg-[${backColorSelected.color}]`]: true,
+                           }" 
+                           class="md:w-[43%] h-full rounded-xl grid grid-rows-[30%_1fr] grid-cols-1 p-1 border-8"
+                        >
+                           <div class="flex justify-center">
+                              <div class="w-4 h-4 mt-3 rounded-full bg-black border-2 border-white"></div>
+                           </div>
+                           <div class="w-full rounded -pb-4" ref="container">
+                              <v-stage
+                                 ref="stage"
+                                 :config="stageSize"
+                                 @mousedown="handlerStageMouseDown"
+                                 @touchstart="handlerStageMouseDown"
+                              >
+                                 <v-layer ref="layer">
+                                    <v-line
+                                       :config="lineUpConfig" 
+                                    />
+                                    <v-text
+                                       ref="textObj"
+                                       :config="textConfig"
+                                       @dragend="handlerDragEnd"
+                                       @transformend="handlerTransformEnd"
+                                    />
+                                    <v-transformer 
+                                       :centeredScaling="true"
+                                       :rotationSnaps="[0, 90, 180, 270]"
+                                       :resizeEnabled="false"
+                                       :flipEnabled="false"
+                                       :boundBoxFunc="boundBoxFunc"
+                                       ref="transformer"
+                                       @dragmove="handlerTransformMoved"
+                                    />
+                                 </v-layer>
+                              </v-stage>
+                           </div>
                         </div>
-                        <div class="w-full rounded -pb-4" ref="container">
-                           <v-stage
-                              ref="stage"
-                              :config="stageSize"
-                              @mousedown="handlerStageMouseDown"
-                              @touchstart="handlerStageMouseDown"
-                           >
-                              <v-layer ref="layer">
-                                 <v-line
-                                    :config="lineUpConfig" 
-                                 />
-                                 <v-text
-                                    ref="textObj"
-                                    :config="textConfig"
-                                    @dragend="handlerDragEnd"
-                                    @transformend="handlerTransformEnd"
-                                 />
-                                 <v-transformer 
-                                    :centeredScaling="true"
-                                    :rotationSnaps="[0, 90, 180, 270]"
-                                    :resizeEnabled="false"
-                                    :flipEnabled="false"
-                                    :boundBoxFunc="boundBoxFunc"
-                                    ref="transformer"
-                                    @dragmove="handlerTransformMoved"
-                                 />
-                              </v-layer>
-                           </v-stage>
+                     </div>
+                     <div class="mb-8" data-html2canvas-ignore="true">
+                        <div class="border w-full h-[500px] rounded-md">
+                           <TresCanvas clear-color="#fff" preset="realistic">
+                              <TresPerspectiveCamera :position="[3, 2, -250]" />
+                              <OrbitControls />
+                              <Suspense>
+                                 <primitive :object="scene" />
+                              </Suspense>
+                              <TresDirectionalLight :intensity="2" :position="[3, 3, 3]" />
+                              <TresAmbientLight :intensity="1" />
+                           </TresCanvas>
                         </div>
                      </div>
                   </div>
@@ -208,7 +210,7 @@
       y: 0,
       draggable: true,
       name: "text",
-      fill: 'white'
+      fill: 'black'
    });
    let selectedShapeName = "";
 
@@ -437,9 +439,9 @@
                body: formData
             }).then(function(response) {
                if (response.ok) {
-                  console.log('Imagen subida con éxito');
+                  alert('Imagen subida con éxito');
                } else {
-                  console.error('Error al subir la imagen:', response.statusText);
+                  alert('Error al subir la imagen:', response.statusText);
                }
             }).catch(function(error) {
                console.error('Error de red:', error);
@@ -500,7 +502,7 @@
          var x = i * anchoCelda;
          var lineaVertical = new Konva.Line({
             points: [x, 0, x, stageSize.value.height],
-            stroke: 'rgba(255, 255, 255, 0.2)',
+            stroke: 'rgba(0, 0, 0, 0.2)',
             strokeWidth: 1
          });
          layer.value.getNode().add(lineaVertical);
@@ -510,7 +512,7 @@
          var y = j * altoCelda;
          var lineaHorizontal = new Konva.Line({
             points: [0, y, stageSize.value.width, y],
-            stroke: 'rgba(255, 255, 255, 0.2)',
+            stroke: 'rgba(0, 0, 0, 0.2)',
             strokeWidth: 1
          });
          layer.value.getNode().add(lineaHorizontal);
