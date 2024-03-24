@@ -3,7 +3,7 @@
    <div>
       <notifications position="bottom right" />
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-         <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pt-10 mb-4 md:mb-0">
+         <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 mb-4 md:mb-0">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-5">Personalizar cover</h1>
             <div class="flex items-center">
                <button @click="handlerFinish" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center mb-4 md:mb-0">
@@ -66,7 +66,7 @@
                         <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
                            <div class="text-xl">Texto</div>
                            <div class="flex flex-wrap gap-3">
-                              <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
+                              <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full sm:w-1/2 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
                            </div>
                         </div>
                         <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">

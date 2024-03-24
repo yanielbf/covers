@@ -16,3 +16,9 @@ Route::post('/upload', function (Request $request) {
 
     return response()->json(['path' => $path]);
 });
+
+Route::get('/get-customize-covers', function (Request $request) {
+    $directory = 'images';
+    $files = Storage::files($directory);
+    return response()->json(['files' => $files]);
+});

@@ -1,4 +1,4 @@
-<template>
+<template>   
    <CustomizerCover />
 </template>
 <script setup>
