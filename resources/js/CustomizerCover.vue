@@ -93,6 +93,7 @@
                         </div>
                      </div>
                   </div>
+                  <div>{{ codeCover }}</div>
                   <div class="border w-full h-[500px] rounded-md p-5 flex justify-center items-center">
                      <div :class="{
                         [`border-[${borderColorSelected.color}]`]: true,
@@ -142,14 +143,14 @@
 </div>
 </template>
  <script setup>
-   import { ref, onMounted, toRaw } from "vue";
+   import { ref, onMounted, toRaw, computed } from "vue";
    import * as THREE from "three";
    import { TresCanvas } from "@tresjs/core";
    import { useGLTF, OrbitControls } from "@tresjs/cientos";
    import html2canvas from 'html2canvas';
    
    const colors = {
-      back: [
+      side: [
             {id: 1, color: '#057EB5'},
             {id: 2, color: '#00138D'},
             {id: 3, color: '#8A0156'},
@@ -159,7 +160,7 @@
             {id: 7, color: '#FA1432'},
             {id: 8, color: '#305E9B'},
       ],
-      side: [
+      back: [
             {id: 1, color: '#83BE01'},
             {id: 2, color: '#DEB229'},
             {id: 3, color: '#A8A8A8'},
@@ -179,7 +180,7 @@
 
    const backColorSelected = ref(colors.back[0]);
    const borderColorSelected = ref(colors.side[0]);
-   const text = ref();
+   const text = ref('');
    const textSize = ref(20);
    const page = ref();
     
@@ -202,6 +203,9 @@
       fill: 'white'
    });
    let selectedShapeName = "";
+
+   const codeCover = computed(() => 
+      `${window.model}_back_${backColorSelected.value.id}_${backColorSelected.value.color.replace('#', '')}_side_${borderColorSelected.value.id}_${borderColorSelected.value.color.replace('#', '')}_text_${text.value}_fontSize_${textSize.value}`)
     
    function handlerChangeMaterial(piece, item) {
       scene.remove(scene.children[0]);
@@ -235,7 +239,11 @@
    }
    
    function handlerInput (e) {
-      textConfig.value.text = e.target.value;
+      if (text.value.length > 40) {
+         text.value = text.value.slice(0, 40);
+      } else {
+         textConfig.value.text = e.target.value;
+      }
    }
 
    function boundBoxFunc (oldBox, newBox) {
@@ -414,43 +422,43 @@
    }
     
    async function init3d() {
-   try {
-      const { nodes, materials } = await useGLTF(window.urlGlb, {
-         draco: true,
-      });
-   
-      pieces.value = Object.entries(nodes)
-         .filter(([key]) => key.includes("_"))
-         .map(([key, value]) => ({ key, value }));
-   
-      for (const key in materials) {
-         const partes = key.split("_");
-         const id = partes.slice(0, -1).join("_");
-         const p = pieces.value.find((x) => x.key == id);
-         if (p) {
-         p.material = materials[key];
-         }
-      }
-   
-      scene.remove(scene.children[0]);
+      try {
+         const { nodes, materials } = await useGLTF(window.urlGlb, {
+            draco: true,
+         });
       
-      const group = new THREE.Group();
-   
-      for (const iterator of pieces.value) {
-         const piece = toRaw(iterator.value);
-         let mat = toRaw(piece.material);
-         if(iterator.key == '1_1')
-            mat.color.set(backColorSelected.color);
-         if(iterator.key == '1_2')
-            mat.color.set(borderColorSelected.color);
-         piece.material = mat;
-         group.add(piece);
+         pieces.value = Object.entries(nodes)
+            .filter(([key]) => key.includes("_"))
+            .map(([key, value]) => ({ key, value }));
+      
+         for (const key in materials) {
+            const partes = key.split("_");
+            const id = partes.slice(0, -1).join("_");
+            const p = pieces.value.find((x) => x.key == id);
+            if (p) {
+            p.material = materials[key];
+            }
+         }
+      
+         scene.remove(scene.children[0]);
+         
+         const group = new THREE.Group();
+      
+         for (const iterator of pieces.value) {
+            const piece = toRaw(iterator.value);
+            let mat = toRaw(piece.material);
+            if(iterator.key == '1_2')
+               mat.color.set(backColorSelected.color);
+            if(iterator.key == '1_1')
+               mat.color.set(borderColorSelected.color);
+            piece.material = mat;
+            group.add(piece);
+         }
+      
+         scene.add(group);
+      } catch (error) {
+         console.log("No se ha podido cargar el glb " + window.pathGlb + error);
       }
-   
-      scene.add(group);
-   } catch (error) {
-      console.log("No se ha podido cargar el glb " + window.pathGlb+ error);
-   }
    }
 
    function init2d() {

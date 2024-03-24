@@ -11,6 +11,7 @@
         <script src="https://unpkg.com/konva@9.3.6/konva.min.js"></script>
         @vite('resources/css/app.css')
         <script>
+            window.model = {!! json_encode($model) !!};
             window.urlGlb = {!! json_encode($url) !!};
         </script>
     </head>
