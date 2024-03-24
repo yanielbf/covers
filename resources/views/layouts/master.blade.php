@@ -17,8 +17,8 @@
                 <div class="flex flex-1 items-center justify-center sm:items-stretch sm:justify-start">
                   <div>
                     <div class="flex space-x-4">
-                      <a href="/customize/modelo-x" class="{{ Request::is('customize*') ? 'bg-gray-900' : '' }} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Creador de cover</a>
-                      <a href="/created-models" class="{{ Request::is('created-models') ? 'bg-gray-900' : '' }} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Crear modelos</a>
+                      <a href="/customize/iphone-11-plus" class="{{ Request::is('customize*') ? 'bg-gray-900' : '' }} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Creador de cover</a>
+                      <a href="/created-models" class="{{ Request::is('created-models') ? 'bg-gray-900' : '' }} text-gray-300 hover:bg-gray-700 hover:text-white rounded-md px-3 py-2 text-sm font-medium">Modelos creados</a>
                       <a href="/created-covers" class="{{ Request::is('created-covers') ? 'bg-gray-900' : '' }} text-white rounded-md px-3 py-2 text-sm font-medium">Covers creados</a>
                     </div>
                   </div>

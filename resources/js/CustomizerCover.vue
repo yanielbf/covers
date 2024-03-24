@@ -87,7 +87,7 @@
                         </div>
                      </div>
                      <div class="mb-8">
-                        <div><b>Modelo:</b> {{ model }}</div>
+                        <div><b>Modelo:</b> {{ model.name }}</div>
                         <div><b>Color parte trasera:</b> {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
                         <div><b>Color border:</b> {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
                         <div><b>Texto:</b> {{ text }}</div>
@@ -233,7 +233,7 @@
    let selectedShapeName = "";
 
    const codeCover = computed(() => 
-      `${window.model}_back_${backColorSelected.value.id}_${backColorSelected.value.color.replace('#', '')}_side_${borderColorSelected.value.id}_${borderColorSelected.value.color.replace('#', '')}_text_${text.value}_fontSize_${textSize.value}`)
+      `${window.model.name}_back_${backColorSelected.value.id}_${backColorSelected.value.color.replace('#', '')}_side_${borderColorSelected.value.id}_${borderColorSelected.value.color.replace('#', '')}_text_${text.value}_fontSize_${textSize.value}`)
     
    function handlerChangeMaterial(piece, item) {
       if(piece == '1_1') {
