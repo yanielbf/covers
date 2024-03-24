@@ -16,7 +16,20 @@
          <section aria-labelledby="products-heading" class="pb-10">
             <div class="grid grid-cols-1 gap-x-8 gap-y-10">
                <div class="py-6">
-                  <div class="mb-8">
+                  <div class="mb-8" data-html2canvas-ignore="true">
+                     <div data-html2canvas-ignore="true" class="border w-full h-[500px] rounded-md">
+                        <TresCanvas clear-color="#fff" preset="realistic">
+                           <TresPerspectiveCamera :position="[3, 2, -250]" />
+                           <OrbitControls />
+                           <Suspense>
+                              <primitive :object="scene" />
+                           </Suspense>
+                           <TresDirectionalLight :intensity="2" :position="[3, 3, 3]" />
+                           <TresAmbientLight :intensity="1" />
+                        </TresCanvas>
+                     </div>
+                  </div>
+                  <div data-html2canvas-ignore="true">
                      <div class="grid grid-cols-[120px_1fr] gap-6 mb-4">
                         <div class="text-xl">Parte trasera</div>
                         <div class="flex flex-wrap gap-3">
@@ -57,26 +70,13 @@
                            </div>
                         </div>
                      </div>
-                     <div data-html2canvas-ignore="true" class="border w-full h-[500px] rounded-md">
-                        <TresCanvas clear-color="#fff" preset="realistic">
-                           <TresPerspectiveCamera :position="[3, 2, -250]" />
-                           <OrbitControls />
-                           <Suspense>
-                              <primitive :object="scene" />
-                           </Suspense>
-                           <TresDirectionalLight :intensity="2" :position="[3, 3, 3]" />
-                           <TresAmbientLight :intensity="1" />
-                        </TresCanvas>
-                     </div>
-                  </div>
-                  <div data-html2canvas-ignore="true">
-                     <div class="mb-10 grid grid-cols-[60px_1fr] items-center gap-6">
+                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
                         <div class="text-xl">Texto</div>
                         <div class="flex flex-wrap gap-3">
                            <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/5 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
                         </div>
                      </div>
-                     <div class="mb-8 grid grid-cols-[60px_1fr] items-center gap-6">
+                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
                         <div class="text-xl">Tamaño</div>
                         <div class="flex flex-wrap gap-3">
                            <div
@@ -93,7 +93,13 @@
                         </div>
                      </div>
                   </div>
-                  <div>{{ codeCover }}</div>
+                  <div class="mb-5">
+                     <div>Modelo: {{ model }}</div>
+                     <div>Color parte trasera: {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
+                     <div>Color border: {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
+                     <div>Texto: {{ text }}</div>
+                     <div>Tamaño: {{ fontSize[textSize] }}</div>
+                  </div>
                   <div class="border w-full h-[500px] rounded-md p-5 flex justify-center items-center">
                      <div :class="{
                         [`border-[${borderColorSelected.color}]`]: true,
@@ -180,9 +186,11 @@
 
    const backColorSelected = ref(colors.back[0]);
    const borderColorSelected = ref(colors.side[0]);
+   const model = ref(window.model);
    const text = ref('');
    const textSize = ref(20);
    const page = ref();
+   const modePrint = ref(false);
     
    const scene = new THREE.Scene();
    const pieces = ref([]);
@@ -416,8 +424,28 @@
    }
 
    async function handlerFinish() {
+      modePrint.value = true;
       html2canvas(page.value).then(function(canvas) {
-         document.body.appendChild(canvas);
+         canvas.toBlob(function(blob) {
+            const filename = `${codeCover.value}.png`
+            const formData = new FormData();
+            formData.append('image', blob, filename);
+            formData.append('filename', filename);
+
+            fetch('/api/upload', {
+               method: 'POST',
+               body: formData
+            }).then(function(response) {
+               if (response.ok) {
+                  console.log('Imagen subida con éxito');
+               } else {
+                  console.error('Error al subir la imagen:', response.statusText);
+               }
+            }).catch(function(error) {
+               console.error('Error de red:', error);
+            });
+            modePrint.value = false;
+         }, 'image/png');
       });
    }
     
