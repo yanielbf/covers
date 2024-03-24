@@ -85,10 +85,10 @@
                               :class="{
                                  'bg-red-400': item === textSize
                               }"
-                              class="w-10 h-10 cursor-pointer rounded-full flex justify-center items-center bg-gray-300"
+                              class="cursor-pointer rounded-xl px-2 py-1 flex justify-center items-center bg-gray-300"
                               @click="handlerChangeSize(item)"
                            >
-                              {{item}}
+                              {{fontSize[item]}}
                            </div>
                         </div>
                      </div>
@@ -100,10 +100,10 @@
                         }" 
                         class="w-[90%] sm:1/4 md:w-1/5 h-full rounded-xl grid grid-rows-[30%_1fr] grid-cols-1 p-1 border-8"
                      >
-                        <div class="flex justify-end">
-                           <div class="w-8 h-8 bg-slate-100 rounded-md"></div>
+                        <div class="flex justify-center">
+                           <div class="w-4 h-4 mt-3 rounded-full bg-black border-2 border-white"></div>
                         </div>
-                        <div class="w-full border border-slate-100 rounded -pb-4" ref="container">
+                        <div class="w-full rounded -pb-4" ref="container">
                            <v-stage
                               ref="stage"
                               :config="stageSize"
@@ -169,7 +169,13 @@
             {id: 7, color: '#FEC708'},
             {id: 8, color: '#563E3B'},
       ]
-   }
+   };
+   
+   const fontSize = {
+      20: "Normal",
+      25: "Mediano",
+      30: "Grande"
+   };
 
    const backColorSelected = ref(colors.back[0]);
    const borderColorSelected = ref(colors.side[0]);
@@ -433,9 +439,9 @@
       for (const iterator of pieces.value) {
          const piece = toRaw(iterator.value);
          let mat = toRaw(piece.material);
-         if(iterator.key == '1_2')
-            mat.color.set(backColorSelected.color);
          if(iterator.key == '1_1')
+            mat.color.set(backColorSelected.color);
+         if(iterator.key == '1_2')
             mat.color.set(borderColorSelected.color);
          piece.material = mat;
          group.add(piece);
@@ -443,7 +449,7 @@
    
       scene.add(group);
    } catch (error) {
-      console.log("No se ha podido cargar el glb " + props.pathGlb);
+      console.log("No se ha podido cargar el glb " + window.pathGlb+ error);
    }
    }
 
