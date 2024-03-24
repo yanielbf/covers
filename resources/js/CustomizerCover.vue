@@ -13,79 +13,81 @@
                </button>
             </div>
          </div>
-         <section aria-labelledby="products-heading" class="pb-10">
+         <section>
             <div class="grid grid-cols-1 gap-x-8 gap-y-10">
                <div class="py-6">
-                  <div data-html2canvas-ignore="true">
-                     <div class="grid grid-cols-[120px_1fr] gap-6 mb-4">
-                        <div class="text-xl">Parte trasera</div>
-                        <div class="flex flex-wrap gap-3">
-                           <div
-                              v-for="item in colors.back"
-                              :key="item.id" 
-                              :class="{
-                              [`bg-[${item.color}]`]: true,
-                              'border-white': item.color != backColorSelected.color,
-                              'border-black border-2': item.color == backColorSelected.color 
-                              }"
-                              class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
-                              @click="handlerChangeMaterial('1_2', item)"
-                           >
-                              <svg v-if="item.color == backColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
-                              </svg>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                     <div data-html2canvas-ignore="true">
+                        <div class="grid grid-cols-[120px_1fr] gap-6 mb-4">
+                           <div class="text-xl">Parte trasera</div>
+                           <div class="flex flex-wrap gap-3">
+                              <div
+                                 v-for="item in colors.back"
+                                 :key="item.id" 
+                                 :class="{
+                                 [`bg-[${item.color}]`]: true,
+                                 'border-white': item.color != backColorSelected.color,
+                                 'border-black border-2': item.color == backColorSelected.color 
+                                 }"
+                                 class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
+                                 @click="handlerChangeMaterial('1_2', item)"
+                              >
+                                 <svg v-if="item.color == backColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                                 </svg>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
+                           <div class="text-xl">Bordes</div>
+                           <div class="flex flex-wrap gap-3">
+                              <div
+                                 v-for="item in colors.side"
+                                 :key="item.id" 
+                                 :class="{
+                                 [`bg-[${item.color}]`]: true,
+                                 'border-white': item.color != borderColorSelected.color,
+                                 'border-black border-2': item.color == borderColorSelected.color 
+                                 }"
+                                 class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
+                                 @click="handlerChangeMaterial('1_1', item)"
+                              >
+                                 <svg v-if="item.color == borderColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                                 </svg>
+                              </div>
+                           </div>
+                        </div>
+                        <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
+                           <div class="text-xl">Texto</div>
+                           <div class="flex flex-wrap gap-3">
+                              <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
+                           </div>
+                        </div>
+                        <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
+                           <div class="text-xl">Tamaño</div>
+                           <div class="flex flex-wrap gap-3">
+                              <div
+                                 v-for="item in [20, 25, 30]"
+                                 :key="item" 
+                                 :class="{
+                                    'bg-red-400 text-white': item === textSize
+                                 }"
+                                 class="cursor-pointer rounded-xl px-2 py-1 flex justify-center items-center bg-gray-300"
+                                 @click="handlerChangeSize(item)"
+                              >
+                                 {{fontSize[item]}}
+                              </div>
                            </div>
                         </div>
                      </div>
-                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
-                        <div class="text-xl">Bordes</div>
-                        <div class="flex flex-wrap gap-3">
-                           <div
-                              v-for="item in colors.side"
-                              :key="item.id" 
-                              :class="{
-                              [`bg-[${item.color}]`]: true,
-                              'border-white': item.color != borderColorSelected.color,
-                              'border-black border-2': item.color == borderColorSelected.color 
-                              }"
-                              class="w-8 h-8 cursor-pointer rounded-full flex justify-center items-center"
-                              @click="handlerChangeMaterial('1_1', item)"
-                           >
-                              <svg v-if="item.color == borderColorSelected.color" class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-                                 <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
-                              </svg>
-                           </div>
-                        </div>
+                     <div class="mb-8">
+                        <div><b>Modelo:</b> {{ model }}</div>
+                        <div><b>Color parte trasera:</b> {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
+                        <div><b>Color border:</b> {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
+                        <div><b>Texto:</b> {{ text }}</div>
+                        <div><b>Tamaño:</b> {{ fontSize[textSize] }}</div>
                      </div>
-                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
-                        <div class="text-xl">Texto</div>
-                        <div class="flex flex-wrap gap-3">
-                           <input v-model="text" @input="handlerInput" class="bg-gray-50 border w-full md:w-1/3 border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 " />
-                        </div>
-                     </div>
-                     <div class="mb-5 grid grid-cols-[120px_1fr] items-center gap-6">
-                        <div class="text-xl">Tamaño</div>
-                        <div class="flex flex-wrap gap-3">
-                           <div
-                              v-for="item in [20, 25, 30]"
-                              :key="item" 
-                              :class="{
-                                 'bg-red-400 text-white': item === textSize
-                              }"
-                              class="cursor-pointer rounded-xl px-2 py-1 flex justify-center items-center bg-gray-300"
-                              @click="handlerChangeSize(item)"
-                           >
-                              {{fontSize[item]}}
-                           </div>
-                        </div>
-                     </div>
-                  </div>
-                  <div class="mb-8">
-                     <div><b>Modelo:</b> {{ model }}</div>
-                     <div><b>Color parte trasera:</b> {{ backColorSelected.color }} ({{ backColorSelected.id }})</div>
-                     <div><b>Color border:</b> {{ borderColorSelected.color }} ({{ borderColorSelected.id }})</div>
-                     <div><b>Texto:</b> {{ text }}</div>
-                     <div><b>Tamaño:</b> {{ fontSize[textSize] }}</div>
                   </div>
                   <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                      <div class="border w-full h-[500px] rounded-md p-5 flex justify-center items-center">
