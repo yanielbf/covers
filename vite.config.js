@@ -9,5 +9,8 @@ export default defineConfig({
             input: ['resources/css/app.css', 'resources/js/app.js'],
             refresh: true,
         }),
-    ]
+    ],
+    optimizeDeps: {
+        exclude: ['@kyvg_vue3-notification.js']
+    }
 });

@@ -1,13 +1,18 @@
 <template>
 <div ref="page" class="bg-white">
    <div>
+      <notifications position="bottom right" />
       <main class="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
          <div data-html2canvas-ignore="true" class="flex flex-wrap items-baseline justify-between border-b border-gray-200 pt-10 mb-4 md:mb-0">
             <h1 class="text-4xl font-bold tracking-tight text-gray-900 mb-5">Personalizar cover</h1>
             <div class="flex items-center">
                <button @click="handlerFinish" type="button" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded flex items-center mb-4 md:mb-0">
-                  <svg class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+                  <svg v-if="!isLoading" class="w-6 h-6" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 11.917 9.724 16.5 19 7.5"/>
+                  </svg>
+                  <svg v-else class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                     <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                     <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                   </svg>
                   <span class="ml-1">Finalizar</span>
                </button>
@@ -133,7 +138,7 @@
                      </div>
                      <div class="mb-8" data-html2canvas-ignore="true">
                         <div class="border w-full h-[500px] rounded-md">
-                           <TresCanvas clear-color="#fff" preset="realistic">
+                           <TresCanvas v-if="!isLoading3D" clear-color="#fff" preset="realistic">
                               <TresPerspectiveCamera :position="[3, 2, -250]" />
                               <OrbitControls />
                               <Suspense>
@@ -142,6 +147,13 @@
                               <TresDirectionalLight :intensity="2" :position="[3, 3, 3]" />
                               <TresAmbientLight :intensity="1" />
                            </TresCanvas>
+                           <div v-else class="w-full h-full flex justify-center items-center font-semibold text-xl flex-col">
+                              <div class="mb-3">Cargando modelo 3D...</div>
+                              <svg class="animate-spin -ml-1 mr-3 h-10 w-10 text-blue-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                              </svg>
+                           </div>
                         </div>
                      </div>
                   </div>
@@ -158,6 +170,9 @@
    import { TresCanvas } from "@tresjs/core";
    import { useGLTF, OrbitControls } from "@tresjs/cientos";
    import html2canvas from 'html2canvas';
+   import { useNotification } from "@kyvg/vue3-notification";
+
+   const { notify }  = useNotification()
    
    const colors = {
       side: [
@@ -194,7 +209,8 @@
    const text = ref('');
    const textSize = ref(20);
    const page = ref();
-   const modePrint = ref(false);
+   const isLoading = ref(false);
+   const isLoading3D = ref(true);
     
    const scene = new THREE.Scene();
    const pieces = ref([]);
@@ -428,7 +444,7 @@
    }
 
    async function handlerFinish() {
-      modePrint.value = true;
+      isLoading.value = true;
       html2canvas(page.value).then(function(canvas) {
          canvas.toBlob(function(blob) {
             const filename = `${codeCover.value}.png`
@@ -441,14 +457,23 @@
                body: formData
             }).then(function(response) {
                if (response.ok) {
-                  alert('Imagen subida con éxito');
+                  notify({
+                     title: "Producto creado",
+                     text: "Se ha creado y añadido el cover a tu carrito",
+                  });
+                  setTimeout(() => window.location.reload(), 2000)
                } else {
-                  alert('Error al subir la imagen:', response.statusText);
+                  notify({
+                     title: "Error",
+                     text: 'Error al subir la imagen: ' + response.statusText,
+                     type: 'error'
+                  });
                }
             }).catch(function(error) {
                console.error('Error de red:', error);
+            }).finally(() => {
+               isLoading.value = false;
             });
-            modePrint.value = false;
          }, 'image/png');
       });
    }
@@ -458,6 +483,7 @@
          const { nodes, materials } = await useGLTF(window.urlGlb, {
             draco: true,
          });
+         isLoading3D.value = false
       
          pieces.value = Object.entries(nodes)
             .filter(([key]) => key.includes("_"))
